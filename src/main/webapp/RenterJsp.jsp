@@ -3,11 +3,16 @@
 <%@ page import="com.example.WebGaneevRM.dto.RenterDTO" %>
 <%@ page import="java.util.LinkedList" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
-<html>
+<!DOCTYPE html>
+<html lang="ru">
     <head>
         <title>Арендаторы</title>
+        <link href="css/main.css" rel="stylesheet"/>
     </head>
     <body>
+        <header>
+            Аренда настольных игр
+        </header>
         <h1>Арендаторы</h1>
         <br>
         <table border="2">

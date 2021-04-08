@@ -1,0 +1,49 @@
+body {
+    background: url(https://html5book.ru/wp-content/uploads/2015/10/background54.png)
+}
+
+header {
+    font-size: 30px;
+    background-color: mediumturquoise;
+}
+
+main {
+    font-size: 25px;
+    background-color: blanchedalmond;
+}
+
+footer {
+    font-size: 15px;
+    background-color: lightyellow;
+}
+
+.main_block {
+    text-align: center;
+    font-family: "Century Gothic", serif;
+    width: 70%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid gainsboro;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+button {
+    position: relative;
+    display: inline-block;
+    font-size: 20px;
+    padding: 8px 20px;
+    margin: 10px;
+    font-family: "Century Gothic", serif;
+    color: black;
+    background: white;
+    border: 2px solid mediumturquoise;
+    transition: .4s linear;
+}
+
+button:hover {
+    background: mediumturquoise;
+    color: white;
+    font-size: 22px;
+}
