@@ -1,10 +1,5 @@
 body {
-    background: url(https://html5book.ru/wp-content/uploads/2015/10/background54.png)
-}
-
-header {
-    font-size: 30px;
-    background-color: mediumturquoise;
+    background: url(https://html5book.ru/examples/buttons-4/bg.jpg)
 }
 
 main {
@@ -21,6 +16,7 @@ footer {
     text-align: center;
     font-family: "Century Gothic", serif;
     width: 70%;
+    max-width: 70%;
     padding: 10px;
     border-radius: 10px;
     border: 2px solid gainsboro;
@@ -29,12 +25,36 @@ footer {
     margin-right: auto;
 }
 
+.name_bar {
+    font-size: 30px;
+    background-color: mediumturquoise;
+}
+
+div.bar > form{
+    display: inline;
+}
+
+.bar {
+    background-color: blanchedalmond;
+}
+
+div.lightyellow > form{
+    display: inline;
+}
+
+.lightyellow {
+    background-color: lightyellow;
+}
 button {
     position: relative;
     display: inline-block;
-    font-size: 20px;
-    padding: 8px 20px;
+    font-size: 18px;
+    padding: 8px 2px;
     margin: 10px;
+    width: 155px;
+    max-width: 155px;
+    height: 50px;
+    max-height: 50px;
     font-family: "Century Gothic", serif;
     color: black;
     background: white;
@@ -45,5 +65,71 @@ button {
 button:hover {
     background: mediumturquoise;
     color: white;
-    font-size: 22px;
+}
+
+.tale_block {
+    width: auto;
+    height: auto;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid gainsboro;
+    overflow-y: scroll;
+}
+
+table {
+    width: 100%;
+    border: 1px solid gainsboro;
+    border-collapse: collapse;
+}
+
+table th {
+    font-weight: bold;
+    padding: 5px;
+    background: #efefef;
+    border: 3px solid gainsboro;
+    font-size: 15px;
+}
+
+table td {
+    border: 3px solid gainsboro;
+    padding: 5px;
+}
+
+input[type="text"] {
+    border: 1px solid gainsboro;
+    border-radius: 3px;
+    background: #ffffff !important;
+    outline: none;
+    width: 300px;
+    max-width: 300px;
+    color: black;
+    font-size: 15px;
+    font-family: inherit;
+    padding: 5px;
+}
+
+input[type="email"], [type="tel"] {
+    border: 1px solid gainsboro;
+    border-radius: 3px;
+    background: #ffffff !important;
+    outline: none;
+    width: 140px;
+    max-width: 140px;
+    color: black;
+    font-size: 15px;
+    font-family: inherit;
+    padding: 5px;
+}
+
+.id_col {
+    width: 15px;
+    font-size: 15px;
+}
+
+input[type="checkbox"] {
+    border: 1px solid gainsboro;
+    border-radius: 3px;
+    background: #ffffff !important;
+    outline: none;
+    color: mediumturquoise;
 }
