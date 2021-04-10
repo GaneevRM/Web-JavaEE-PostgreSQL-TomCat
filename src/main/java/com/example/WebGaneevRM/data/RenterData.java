@@ -40,15 +40,11 @@ public class RenterData {
         }
     }
 
-    public static void deleteRenter(int idRenter){
-        try (Connection connection = DataBaseConnection.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM renter WHERE id_renter = ?;");
-            preparedStatement.setInt(1, idRenter);
-            preparedStatement.executeUpdate();
-            selectRenter();
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
+    public static void deleteRenter(int idRenter) throws SQLException {
+        Connection connection = DataBaseConnection.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM renter WHERE id_renter = ?;");
+        preparedStatement.setInt(1, idRenter);
+        preparedStatement.executeUpdate();
     }
 
     public static void editRenter(LinkedList<String> editedFields, int idRenter){

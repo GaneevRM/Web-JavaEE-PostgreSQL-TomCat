@@ -67,10 +67,11 @@ button:hover {
     color: white;
 }
 
-.tale_block {
+.table_block {
     width: auto;
-    height: auto;
-    padding: 10px;
+    height: 300px;
+    max-height: 300px;
+    padding: 0 10px;
     border-radius: 10px;
     border: 2px solid gainsboro;
     overflow-y: scroll;
@@ -80,6 +81,7 @@ table {
     width: 100%;
     border: 1px solid gainsboro;
     border-collapse: collapse;
+    margin: 5px;
 }
 
 table th {

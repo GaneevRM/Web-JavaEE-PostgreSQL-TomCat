@@ -15,7 +15,7 @@
         <div class="main_block name_bar">Аренда настольных игр</div>
         <div class="main_block bar">
             <form method="post" action="RenterServlet">
-                <button>Арендаторы</button>
+                <button name="action" value="renterPage">Арендаторы</button>
             </form>
             <form method="post" action="LandlordJsp.jsp">
                 <button>Арендодатели</button>
@@ -32,13 +32,14 @@
         </div>
     </header>
         <main class="main_block">
+            <form method="post" action="RenterServlet">
             <p>Арендаторы</p>
-            <div class="tale_block lightyellow">
+            <div class="table_block lightyellow">
                 <table border="2">
                     <thead>
                     <tr>
                         <th><input type="checkbox" onclick="onClickMainCheckBox(this)"></th>
-                        <th>ID</th>
+                        <th>№</th>
                         <th>ФИО</th>
                         <th>Телефон</th>
                         <th>Email</th>
@@ -47,9 +48,9 @@
                     <tbody>
                     <c:forEach var="item" items="${renters}">
                         <tr>
-                            <td><input type="checkbox" name="checkBox"></td>
+                            <td><input type="checkbox" name="list" value=${item.getId_renter()}></td>
                             <td class="id_col">${item.getId_renter()}</td>
-                            <td><input type="text" onkeypress="if ( isNaN(this.value + String.fromCharCode(event.keyCode) )) return false;" value="${item.getName_renter()}"></td>
+                            <td><input type="text" value="${item.getName_renter()}"></td>
                             <td><input type="tel" value="${item.getPhone()}"></td>
                             <td><input type="email" value="${item.getEmail()}"></td>
                         </tr>
@@ -59,16 +60,20 @@
             </div>
             <br>
             <div class="main_block lightyellow">
-                <form method="post">
-                <button>Добавить</button>
-                </form>
-                <form method="post">
-                    <button>Удалить</button>
-                </form>
-                <form method="post">
-                    <button>Редактировать</button>
-                </form>
+                    <button name="action" value="add">Добавить</button>
+                    <button name="action" value="delete">Удалить</button>
+                    <button name="action" value="edit">Редактировать</button>
             </div>
+            </form>
+            <%
+                String errorM = (String) request.getAttribute("error");
+            %>
+            <c:if test="${error!=null}">
+                <script>
+                    var error="<%= errorM%>";
+                    alert(error);
+                </script>
+            </c:if>
         </main>
         <footer class="main_block">
             Разработчик: Ганеев Рустам
