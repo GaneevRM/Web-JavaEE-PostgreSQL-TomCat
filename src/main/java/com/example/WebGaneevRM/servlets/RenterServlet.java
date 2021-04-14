@@ -12,12 +12,14 @@ import java.sql.SQLException;
 public class RenterServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("renters", RenterData.selectRenter());
+        getServletContext().getRequestDispatcher("/RenterJsp.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if(request.getParameter("action").equals("add")){
-            getServletContext().getRequestDispatcher("/ContractJsp.jsp").forward(request,response);
+            //getServletContext().getRequestDispatcher("/ContractJsp.jsp").forward(request,response);
         } else if (request.getParameter("action").equals("delete")) {
             String [] listCheckBox = request.getParameterValues("list");
             for (String id: listCheckBox) {

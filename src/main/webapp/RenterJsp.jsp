@@ -9,6 +9,8 @@
 <head>
     <title>Добро пожаловать!</title>
     <link href="css/main.css" rel="stylesheet"/>
+    <link href="css/modal.css" rel="stylesheet">
+    <script src="js/modal.js"></script>
 </head>
     <body>
     <header>
@@ -50,21 +52,49 @@
                         <tr>
                             <td><input type="checkbox" name="list" value=${item.getId_renter()}></td>
                             <td class="id_col">${item.getId_renter()}</td>
-                            <td><input type="text" value="${item.getName_renter()}"></td>
-                            <td><input type="tel" value="${item.getPhone()}"></td>
-                            <td><input type="email" value="${item.getEmail()}"></td>
+                            <td><input type="text" class="input_table" value="${item.getName_renter()}"></td>
+                            <td><input type="tel" class="input_table" value="${item.getPhone()}"></td>
+                            <td><input type="email" class="input_table" value="${item.getEmail()}"></td>
                         </tr>
                     </c:forEach>
                     </tbody>
                 </table>
             </div>
             <br>
-            <div class="main_block lightyellow">
-                    <button name="action" value="add">Добавить</button>
-                    <button name="action" value="delete">Удалить</button>
-                    <button name="action" value="edit">Редактировать</button>
-            </div>
             </form>
+
+
+            <div class="main_block lightyellow">
+                <button id="actionAdd" name="action" value="add">Добавить</button>
+                <button name="action" value="delete">Удалить</button>
+                <button id="actionEdit" name="action" value="edit">Редактировать</button>
+            </div>
+
+            <script>
+                var modal = $modal({
+                    title: 'Добавление новой записи',
+                    content: '<form method="post" action="RenterServlet">' +
+                        '<p><b>ФИО:</b><br>' +
+                        '<input required type="text" class="input_modal"></p>' +
+                        '<p><b>Телефон:</b><br>' +
+                        '<input required type="tel" class="input_modal"></p>' +
+                        '<p><b>Email:</b><br>' +
+                        '<input required type="email" class="input_modal"></p>' +
+                        '</form>',
+                    footerButtons: [
+                        { class: 'btn btn__cancel', text: 'Отмена', handler: 'modalHandlerCancel' },
+                        { class: 'btn btn__ok', text: 'ОК', handler: 'modalHandlerOk' }
+                    ]
+                });
+                document.querySelector('#actionAdd').addEventListener('click', function(e) {
+                    modal.show();
+                });
+
+                document.querySelector('#actionEdit').addEventListener('click', function(e) {
+                    modal.show();
+                });
+            </script>
+
             <%
                 String errorM = (String) request.getAttribute("error");
             %>
