@@ -1,4 +1,63 @@
 package com.example.WebGaneevRM.data;
 
+import com.example.WebGaneevRM.dto.GameDTO;
+import com.example.WebGaneevRM.tools.DataBaseConnection;
+
+import java.sql.*;
+import java.util.LinkedList;
+
 public class GameData {
+    public static LinkedList<GameDTO> selectGame() {
+        LinkedList<GameDTO> listGame = new LinkedList<GameDTO>();
+        try (Connection connection = DataBaseConnection.getConnection()) {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM game ORDER BY id_game ASC ");
+            while (resultSet.next()) {
+                GameDTO gameDTO = new GameDTO();
+                gameDTO.setId_game(Integer.parseInt(resultSet.getString(1)));
+                gameDTO.setName_game(resultSet.getString(2));
+                gameDTO.setRelease_date(resultSet.getDate(3));
+                gameDTO.setNumber_players(resultSet.getInt(4));
+                gameDTO.setDifficulty(resultSet.getString(5));
+                listGame.add(gameDTO);
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listGame;
+    }
+
+    public static void addGame(String name_game, Date release_date, int number_players, String difficulty){
+        try (Connection connection = DataBaseConnection.getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO game VALUES (nextval('seq_id_game'), ?, ?, ?, ?);");
+            preparedStatement.setString(1, name_game);
+            preparedStatement.setDate(2, release_date);
+            preparedStatement.setInt(3, number_players);
+            preparedStatement.setString(4, difficulty);
+            preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteGame(int id_game) throws SQLException {
+        Connection connection = DataBaseConnection.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM game WHERE id_game = ?;");
+        preparedStatement.setInt(1, id_game);
+        preparedStatement.executeUpdate();
+    }
+
+    public static void editGame(int id_game, String name_game, Date release_date, int number_players, String difficulty) throws SQLException{
+        try (Connection connection = DataBaseConnection.getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE game SET name_game = ?, release_date = ?, number_players = ?, difficulty = ? WHERE id_game = ?;");
+            preparedStatement.setString(1, name_game);
+            preparedStatement.setDate(2, release_date);
+            preparedStatement.setInt(3, number_players);
+            preparedStatement.setString(4, difficulty);
+            preparedStatement.setInt(5, id_game);
+            preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
 }
