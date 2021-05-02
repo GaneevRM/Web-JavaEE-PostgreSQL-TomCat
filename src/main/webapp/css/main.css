@@ -7,6 +7,26 @@ main {
     background-color: blanchedalmond;
 }
 
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: white;
+    border-radius: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 71%;
+}
+
+.header_content {
+    text-align: center;
+    font-family: "Century Gothic", serif;
+    padding: 5px;
+    border-radius: 10px;
+    border: 2px solid gainsboro;
+    margin-top: 10px;
+}
+
 footer {
     font-size: 15px;
     background-color: lightyellow;
@@ -17,10 +37,10 @@ footer {
     font-family: "Century Gothic", serif;
     width: 70%;
     max-width: 70%;
-    padding: 10px;
+    padding: 5px;
     border-radius: 10px;
     border: 2px solid gainsboro;
-    margin-bottom: 10px;
+    margin-top: 10px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -68,6 +88,28 @@ button:hover {
     color: white;
 }
 
+button:disabled,button[disabled] {
+    position: relative;
+    display: inline-block;
+    font-size: 18px;
+    padding: 8px 2px;
+    margin: 10px;
+    width: 155px;
+    max-width: 155px;
+    height: 50px;
+    max-height: 50px;
+    font-family: "Century Gothic", serif;
+    color: #949999;
+    background: #f2fffd;
+    border: 2px solid #bcd0cd;
+    transition: .4s linear;
+}
+
+#actionError {
+    width: 320px;
+    max-width: 320px;
+}
+
 .table_block {
     width: auto;
     height: 300px;
@@ -83,6 +125,11 @@ table {
     border: 1px solid gainsboro;
     border-collapse: collapse;
     margin: 5px;
+}
+
+thead {
+    position: sticky;
+    top: 0;
 }
 
 table th {
@@ -103,15 +150,16 @@ table td {
     border-radius: 3px;
     background: #ffffff !important;
     outline: none;
-    width: 300px;
-    max-width: 300px;
+    width: 250px;
+    max-width: 250px;
     color: black;
     font-size: 15px;
     font-family: inherit;
+    margin-top: 5px;
     padding: 5px;
 }
 
-.input_table[type="email"], [type="tel"] {
+.input_table[type="email"], [type="tel"], [type="date"], [type="number"] {
     border: 1px solid gainsboro;
     border-radius: 3px;
     background: #ffffff !important;
@@ -121,6 +169,21 @@ table td {
     color: black;
     font-size: 15px;
     font-family: inherit;
+    margin-top: 5px;
+    padding: 5px;
+}
+
+select {
+    border: 1px solid gainsboro;
+    border-radius: 3px;
+    background: #ffffff !important;
+    outline: none;
+    width: 250px;
+    max-width: 250px;
+    color: black;
+    font-size: 15px;
+    font-family: inherit;
+    margin-top: 5px;
     padding: 5px;
 }
 
