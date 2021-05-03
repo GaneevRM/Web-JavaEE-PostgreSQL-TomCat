@@ -1,12 +1,15 @@
 package com.example.WebGaneevRM.data;
 
-import com.example.WebGaneevRM.DataBaseConnection;
+import com.example.WebGaneevRM.tools.DataBaseConnection;
 import com.example.WebGaneevRM.dto.RenterDTO;
 
 import java.sql.*;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class RenterData {
+    public static final Logger logger = Logger.getLogger(RenterData.class.getName());
 
     public static LinkedList<RenterDTO> selectRenter() {
         LinkedList<RenterDTO> listRenter = new LinkedList<RenterDTO>();
@@ -21,38 +24,40 @@ public class RenterData {
                 renterDTO.setEmail(resultSet.getString(4));
                 listRenter.add(renterDTO);
             }
-        }catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            logger.log(Level.WARNING,"Ошибка SQL при считывании данных из таблицы renter", e);
+        } catch (Exception exception) {
+            logger.log(Level.WARNING,"Ошибка при считывании данных из таблицы renter", exception);
         }
         return listRenter;
     }
 
-    public static void addRenter(String nameRenter, String phoneRenter, String emailRenter){
+    public static void addRenter(String nameRenter, String phoneRenter, String emailRenter) throws SQLException {
         try (Connection connection = DataBaseConnection.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO renter VALUES (nextval('seq_id_renter'), ?, ?, ?);");
             preparedStatement.setString(1, nameRenter);
             preparedStatement.setString(2, phoneRenter);
             preparedStatement.setString(3, emailRenter);
             preparedStatement.executeUpdate();
-            selectRenter();
-        }catch (SQLException e){
-            e.printStackTrace();
         }
     }
 
     public static void deleteRenter(int idRenter) throws SQLException {
-        Connection connection = DataBaseConnection.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM renter WHERE id_renter = ?;");
-        preparedStatement.setInt(1, idRenter);
-        preparedStatement.executeUpdate();
+        try (Connection connection = DataBaseConnection.getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM renter WHERE id_renter = ?;");
+            preparedStatement.setInt(1, idRenter);
+            preparedStatement.executeUpdate();
+        }
     }
 
-    public static void editRenter(LinkedList<String> editedFields, int idRenter){
+    public static void editRenter(int idRenter, String nameRenter, String phoneRenter, String emailRenter) throws SQLException{
         try (Connection connection = DataBaseConnection.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE renter SET name_renter = ?;");
-            selectRenter();
-        }catch (SQLException e){
-            e.printStackTrace();
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE renter SET name_renter = ?, phone = ?, email = ? WHERE id_renter = ?;");
+            preparedStatement.setString(1, nameRenter);
+            preparedStatement.setString(2, phoneRenter);
+            preparedStatement.setString(3, emailRenter);
+            preparedStatement.setInt(4, idRenter);
+            preparedStatement.executeUpdate();
         }
     }
 }
