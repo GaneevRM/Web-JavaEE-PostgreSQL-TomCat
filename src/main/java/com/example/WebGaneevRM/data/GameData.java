@@ -5,6 +5,9 @@ import com.example.WebGaneevRM.tools.DataBaseConnection;
 
 import java.sql.*;
 import java.util.LinkedList;
+import java.util.logging.Level;
+
+import static com.example.WebGaneevRM.data.RenterData.logger;
 
 public class GameData {
     public static LinkedList<GameDTO> selectGame() {
@@ -21,13 +24,15 @@ public class GameData {
                 gameDTO.setDifficulty(resultSet.getString(5));
                 listGame.add(gameDTO);
             }
-        }catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            logger.log(Level.WARNING,"Ошибка SQL при считывании данных из таблицы game", e);
+        } catch (Exception exception) {
+            logger.log(Level.WARNING,"Ошибка при считывании данных из таблицы game", exception);
         }
         return listGame;
     }
 
-    public static void addGame(String name_game, Date release_date, int number_players, String difficulty){
+    public static void addGame(String name_game, Date release_date, int number_players, String difficulty) throws SQLException {
         try (Connection connection = DataBaseConnection.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO game VALUES (nextval('seq_id_game'), ?, ?, ?, ?);");
             preparedStatement.setString(1, name_game);
@@ -35,16 +40,15 @@ public class GameData {
             preparedStatement.setInt(3, number_players);
             preparedStatement.setString(4, difficulty);
             preparedStatement.executeUpdate();
-        }catch (SQLException e){
-            e.printStackTrace();
         }
     }
 
     public static void deleteGame(int id_game) throws SQLException {
-        Connection connection = DataBaseConnection.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM game WHERE id_game = ?;");
-        preparedStatement.setInt(1, id_game);
-        preparedStatement.executeUpdate();
+        try (Connection connection = DataBaseConnection.getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM game WHERE id_game = ?;");
+            preparedStatement.setInt(1, id_game);
+            preparedStatement.executeUpdate();
+        }
     }
 
     public static void editGame(int id_game, String name_game, Date release_date, int number_players, String difficulty) throws SQLException{
@@ -56,8 +60,6 @@ public class GameData {
             preparedStatement.setString(4, difficulty);
             preparedStatement.setInt(5, id_game);
             preparedStatement.executeUpdate();
-        }catch (SQLException e){
-            e.printStackTrace();
         }
     }
 }
