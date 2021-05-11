@@ -1,15 +1,16 @@
 package com.example.WebGaneevRM.servlets;
 
 import com.example.WebGaneevRM.data.GameData;
-import com.example.WebGaneevRM.data.RenterData;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.logging.Level;
+
+import static com.example.WebGaneevRM.data.RenterData.logger;
 
 @WebServlet(name = "GameServlet", value = "/GameServlet")
 public class GameServlet extends HttpServlet {
@@ -24,7 +25,13 @@ public class GameServlet extends HttpServlet {
         request.setCharacterEncoding("UTF8");
         switch (request.getParameter("action")) {
             case "ok":
-                GameData.addGame(request.getParameter("nameOk"), Date.valueOf(request.getParameter("dateOk")), Integer.parseInt(request.getParameter("numberOk")), request.getParameter("difficultyOk"));
+                try {
+                    GameData.addGame(request.getParameter("nameOk"), Date.valueOf(request.getParameter("dateOk")), Integer.parseInt(request.getParameter("numberOk")), request.getParameter("difficultyOk"));
+                } catch (SQLException e) {
+                    logger.log(Level.WARNING,"Ошибка SQL при добавлении записи", e);
+                } catch (Exception exception) {
+                    logger.log(Level.WARNING,"Ошибка при добавлении записи", exception);
+                }
                 request.setAttribute("games", GameData.selectGame());
                 getServletContext().getRequestDispatcher("/GameJsp.jsp").forward(request, response);
                 break;
@@ -35,19 +42,22 @@ public class GameServlet extends HttpServlet {
                     int counterForMass = Integer.parseInt(counter);
                     try {
                         GameData.deleteGame(Integer.parseInt(listId[counterForMass]));
+                        logger.info("Запись №" + counter + " удалена");
                     } catch (SQLException e) {
-                        e.printStackTrace();
                         if (e.getSQLState().equals("23503")) {
+                            logger.log(Level.WARNING,"Удаление невозможно. Запись №" + Integer.parseInt(listId[counterForMass]) + " используется в другой таблице", e);
                             request.setAttribute("error", "Удаление невозможно. Запись №" + Integer.parseInt(listId[counterForMass]) + " используется в другой таблице");
-                            request.setAttribute("games", GameData.selectGame());
-                            getServletContext().getRequestDispatcher("/GameJsp.jsp").forward(request, response);
+                        } else {
+                            logger.log(Level.WARNING,"Ошибка SQL при удалении записи", e);
                         }
+                        break;
+                    } catch (Exception exception) {
+                        logger.log(Level.WARNING,"Ошибка при удалении записи", exception);
                         break;
                     }
                 }
                 request.setAttribute("games", GameData.selectGame());
                 getServletContext().getRequestDispatcher("/GameJsp.jsp").forward(request, response);
-
                 break;
             }
             case "edit": {
@@ -63,10 +73,12 @@ public class GameServlet extends HttpServlet {
                     try {
                         int counterForMass = Integer.parseInt(counter);
                         GameData.editGame(Integer.parseInt(listId[counterForMass]), listName[counterForMass], Date.valueOf(listDate[counterForMass]), Integer.parseInt(listNumber[counterForMass]), listDifficulty[counterForMass]);
+                        logger.info("Запись №" + counter + " отредактирована");
                     } catch (SQLException e) {
-                        e.printStackTrace();
-                        request.setAttribute("games", GameData.selectGame());
-                        getServletContext().getRequestDispatcher("/GameJsp.jsp").forward(request, response);
+                        logger.log(Level.WARNING,"Ошибка SQL при редактировании записи", e);
+                        break;
+                    } catch (Exception exception) {
+                        logger.log(Level.WARNING,"Ошибка при редактировании записи", exception);
                         break;
                     }
                 }
