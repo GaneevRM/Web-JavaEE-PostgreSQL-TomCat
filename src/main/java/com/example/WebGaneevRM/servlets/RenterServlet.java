@@ -7,6 +7,9 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.logging.Level;
+
+import static com.example.WebGaneevRM.data.RenterData.logger;
 
 @WebServlet(name = "RenterServlet", value = "/RenterServlet")
 public class RenterServlet extends HttpServlet {
@@ -21,7 +24,14 @@ public class RenterServlet extends HttpServlet {
         request.setCharacterEncoding("UTF8");
         switch (request.getParameter("action")) {
             case "ok":
-                RenterData.addRenter(request.getParameter("nameOk"), request.getParameter("phoneOk"), request.getParameter("emailOk"));
+                try {
+                    RenterData.addRenter(request.getParameter("nameOk"), request.getParameter("phoneOk"), request.getParameter("emailOk"));
+                    logger.info("Новая запись добавлена");
+                } catch (SQLException e) {
+                    logger.log(Level.WARNING,"Ошибка SQL при добавлении записи", e);
+                } catch (Exception exception) {
+                    logger.log(Level.WARNING,"Ошибка при добавлении записи", exception);
+                }
                 request.setAttribute("renters", RenterData.selectRenter());
                 getServletContext().getRequestDispatcher("/RenterJsp.jsp").forward(request, response);
                 break;
@@ -32,20 +42,22 @@ public class RenterServlet extends HttpServlet {
                     int counterForMass = Integer.parseInt(counter);
                     try {
                         RenterData.deleteRenter(Integer.parseInt(listId[counterForMass]));
+                        logger.info("Запись №" + counter + " удалена");
                     } catch (SQLException e) {
                         if (e.getSQLState().equals("23503")) {
-                            e.printStackTrace();
-                        //    System.out.println(e + "Удаление невозможно. Запись №" + Integer.parseInt(listId[counterForMass]) + " используется в другой таблице");
+                            logger.log(Level.WARNING,"Удаление невозможно. Запись №" + Integer.parseInt(listId[counterForMass]) + " используется в другой таблице", e);
                             request.setAttribute("error", "Удаление невозможно. Запись №" + Integer.parseInt(listId[counterForMass]) + " используется в другой таблице");
-                            request.setAttribute("renters", RenterData.selectRenter());
-                            getServletContext().getRequestDispatcher("/RenterJsp.jsp").forward(request, response);
+                        } else {
+                            logger.log(Level.WARNING,"Ошибка SQL при удалении записи", e);
                         }
+                        break;
+                    } catch (Exception exception) {
+                        logger.log(Level.WARNING,"Ошибка при удалении записи", exception);
                         break;
                     }
                 }
                 request.setAttribute("renters", RenterData.selectRenter());
                 getServletContext().getRequestDispatcher("/RenterJsp.jsp").forward(request, response);
-
                 break;
             }
             case "edit": {
@@ -59,10 +71,12 @@ public class RenterServlet extends HttpServlet {
                     try {
                         int counterForMass = Integer.parseInt(counter);
                         RenterData.editRenter(Integer.parseInt(listId[counterForMass]), listName[counterForMass], listPhone[counterForMass], listEmail[counterForMass]);
+                        logger.info("Запись №" + counter + " отредактирована");
                     } catch (SQLException e) {
-                        e.printStackTrace();
-                        request.setAttribute("renters", RenterData.selectRenter());
-                        getServletContext().getRequestDispatcher("/RenterJsp.jsp").forward(request, response);
+                        logger.log(Level.WARNING,"Ошибка SQL при редактировании записи", e);
+                        break;
+                    } catch (Exception exception) {
+                        logger.log(Level.WARNING,"Ошибка при редактировании записи", exception);
                         break;
                     }
                 }
