@@ -1,4 +1,4 @@
-package com.example.WebGaneevRM;
+package com.example.WebGaneevRM.tools;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
