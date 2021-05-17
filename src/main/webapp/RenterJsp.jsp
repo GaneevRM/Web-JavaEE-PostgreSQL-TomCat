@@ -14,33 +14,33 @@
 </head>
     <body>
     <header>
-        <div class="main_block name_bar">Аренда настольных игр</div>
-        <div class="main_block bar">
+        <div class="header_content name_bar">Аренда настольных игр</div>
+        <div class="header_content bar">
             <form method="post" action="RenterServlet">
                 <button name="action" value="renterPage">Арендаторы</button>
             </form>
-            <form method="post" action="LandlordJsp.jsp">
-                <button>Арендодатели</button>
+            <form method="post" action="LandlordServlet">
+                <button name="action" value="landlordPage">Арендодатели</button>
             </form>
-            <form method="post" action="ContractJsp.jsp">
-                <button>Договоры</button>
+            <form method="post" action="ContractServlet">
+                <button name="action" value="contractPage">Договоры</button>
             </form>
-            <form method="post" action="GameJsp.jsp">
-                <button>Игры</button>
+            <form method="post" action="GameServlet">
+                <button name="action" value="gamePage">Игры</button>
             </form>
-            <form method="post" action="ConsiderationJsp.jsp">
-                <button>Учёт</button>
+            <form method="post" action="ConsiderationServlet">
+                <button name="action" value="considerationPage">Учёт</button>
             </form>
         </div>
     </header>
         <main class="main_block">
             <form method="post" action="RenterServlet">
-            <p>Арендаторы</p>
+            <p style="margin-top: 15px; margin-bottom: 15px">Арендаторы</p>
             <div class="table_block lightyellow">
                 <table border="2">
                     <thead>
                     <tr>
-                        <th><input type="checkbox" onclick="onClickMainCheckBox(this)"></th>
+                        <th><input class="checkbox" type="checkbox" onclick="onClickMainCheckBox(this)"></th>
                         <th>№</th>
                         <th>ФИО</th>
                         <th>Телефон</th>
@@ -48,49 +48,40 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach var="item" items="${renters}">
+                    <c:forEach var="item" items="${renters}" varStatus="counter">
                         <tr>
-                            <td><input type="checkbox" name="list" value=${item.getId_renter()}></td>
+                            <td><input type="checkbox" name="listCounter" onclick="onClickSimpleCheckBox(this)" value="${counter.index}"></td>
+                            <input type="hidden" name="listId" value="${item.getId_renter()}">
                             <td class="id_col">${item.getId_renter()}</td>
-                            <td><input type="text" class="input_table" value="${item.getName_renter()}"></td>
-                            <td><input type="tel" class="input_table" value="${item.getPhone()}"></td>
-                            <td><input type="email" class="input_table" value="${item.getEmail()}"></td>
+                            <td><input type="text" name="listName" class="input_table" required value="${item.getName_renter()}"></td>
+                            <td><input type="tel" name="listPhone" class="input_table" required value="${item.getPhone()}"></td>
+                            <td><input type="email" name="listEmail" class="input_table" required value="${item.getEmail()}"></td>
                         </tr>
                     </c:forEach>
                     </tbody>
                 </table>
             </div>
-            <br>
-            </form>
-
-
             <div class="main_block lightyellow">
-                <button id="actionAdd" name="action" value="add">Добавить</button>
-                <button name="action" value="delete">Удалить</button>
-                <button id="actionEdit" name="action" value="edit">Редактировать</button>
+                <button id="actionAdd" name="action" value="add" type="button">Добавить</button>
+                <button disabled id="actionDelete" name="action" value="delete" type="submit">Удалить</button>
+                <button disabled id="actionEdit" name="action" value="edit" type="submit">Сохранить</button>
             </div>
+            </form>
 
             <script>
                 var modal = $modal({
                     title: 'Добавление новой записи',
                     content: '<form method="post" action="RenterServlet">' +
                         '<p><b>ФИО:</b><br>' +
-                        '<input required type="text" class="input_modal"></p>' +
+                        '<input required autofocus name="nameOk" type="text" pattern="^[А-Яа-яЁё\\s]+$" class="input_modal"></p>' +
                         '<p><b>Телефон:</b><br>' +
-                        '<input required type="tel" class="input_modal"></p>' +
+                        '<input required name="phoneOk" type="tel" pattern="\\+7-[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}" placeholder="+7-xxx-xxx-xx-xx" class="input_modal"></p>' +
                         '<p><b>Email:</b><br>' +
-                        '<input required type="email" class="input_modal"></p>' +
-                        '</form>',
-                    footerButtons: [
-                        { class: 'btn btn__cancel', text: 'Отмена', handler: 'modalHandlerCancel' },
-                        { class: 'btn btn__ok', text: 'ОК', handler: 'modalHandlerOk' }
-                    ]
+                        '<input required name="emailOk" type="email" class="input_modal"></p>' +
+                        '<button id="okAdd" name="action" value="ok" type="submit">OK</button>' +
+                        '</form>'
                 });
                 document.querySelector('#actionAdd').addEventListener('click', function(e) {
-                    modal.show();
-                });
-
-                document.querySelector('#actionEdit').addEventListener('click', function(e) {
                     modal.show();
                 });
             </script>
